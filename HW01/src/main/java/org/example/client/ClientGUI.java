@@ -87,7 +87,7 @@ public class ClientGUI extends JFrame {
         tfMessage.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     sendMessage();
                 }
             }
@@ -101,7 +101,7 @@ public class ClientGUI extends JFrame {
         });
 
         bottomPanel.add(btnSend, BorderLayout.EAST);
-bottomPanel.add(tfMessage);
+        bottomPanel.add(tfMessage);
 
         return bottomPanel;
     }
