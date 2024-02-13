@@ -1,0 +1,4 @@
+Vasya: Vsem privet!
+Petya: privet!
+Vasya: Сервер снова включен
+Petya: Это хорошо!

@@ -6,10 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ClientGUI extends JFrame implements ClientView{
+public class ClientGUI extends JFrame implements ClientView {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 300;
-    static int instNum = 0;
+    private static int clientNum = 0;
 
     JTextArea log;
     JTextField tfIPAddress, tfPort, tfLogin, tfMessage;
@@ -24,39 +24,34 @@ public class ClientGUI extends JFrame implements ClientView{
         createPanel();
         setVisible(true);
 
-        instNum++;
+        clientNum++;
     }
 
-    private void setting(ServerWindow server){
+    private void setting(ServerWindow server) {
         setSize(WIDTH, HEIGHT);
         setResizable(false);
         setTitle("Chat client");
 
-        setLocation(server.getX() + (1 - 2 * (instNum % 2)) * 500, server.getY());
+        setLocation(server.getX() + (1 - 2 * (clientNum % 2)) * 500, server.getY());
 
         setDefaultCloseOperation(HIDE_ON_CLOSE);
-        client = new Client(this, server.getConnection());
+
+        client = new Client(server.getServer(), this);
     }
 
     @Override
     public void showMessage(String msg) {
-        log.append(msg);
+        log.append(msg + "\n");
     }
 
     @Override
     public void disconnectFromServer() {
-        hideHeaderPanel(true);
+        showHeaderPanel(true);
         client.disconnectFromServer();
     }
 
-    public void hideHeaderPanel(boolean visible) {
+    public void showHeaderPanel(boolean visible) {
         headerPanel.setVisible(visible);
-    }
-
-    public void login() {
-        if (client.connectToServer(tfLogin.getText())) {
-            headerPanel.setVisible(false);
-        }
     }
 
     private void message() {
@@ -84,7 +79,7 @@ public class ClientGUI extends JFrame implements ClientView{
         btnLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                connectToServer();
+                client.connectToServer(tfLogin.getText());
             }
         });
 
@@ -133,5 +128,13 @@ public class ClientGUI extends JFrame implements ClientView{
             disconnectFromServer();
         }
         super.processWindowEvent(e);
+    }
+
+    public void setLog(String log) {
+        this.log.setText(log);
+    }
+
+    public String getClientName(){
+        return tfLogin.getText();
     }
 }

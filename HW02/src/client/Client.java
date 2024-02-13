@@ -1,6 +1,6 @@
 package client;
 
-import server.ServerWindow;
+import server.Server;
 
 public class Client {
     private boolean connected; // if connected
@@ -13,11 +13,14 @@ public class Client {
         this.clientView = clientView;
     }
 
-    private boolean connectToServer(String name) {
+    public boolean connectToServer(String name) {
         this.name = name;
-        if (server.connectUser(this)) {
+        if (server.connectUser(clientView)) {
+            clientView.setLog("");
             showOnWindow("Вы успешно подключились!\n");
             connected = true;
+
+            clientView.showHeaderPanel(false);
 
             String log = server.getHistory();
             if (log != null) {
@@ -36,7 +39,7 @@ public class Client {
 
     public void message(String text) {
         if (connected) {
-            if (text.isEmpty()) {
+            if (!text.isEmpty()) {
                 server.message(name + ": " + text);
             }
         } else {
@@ -44,11 +47,15 @@ public class Client {
         }
     }
 
+    public String getName(){
+        return name;
+    }
+
     public void disconnectFromServer() {
         if (connected) {
             connected = false;
             clientView.disconnectFromServer();
-            server.disconnectUser(this);
+            server.disconnectUser(clientView);
             showOnWindow("Вы были отключены от сервера!");
         }
     }
